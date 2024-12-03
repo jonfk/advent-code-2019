@@ -8,6 +8,8 @@ import (
 
 const smallInput = `xmul(2,4)%&`
 const exampleInput = `xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))`
+const smallConditionalExampleInput = `xmul(2,4)&don't()*do()`
+const conditionalExampleInput = `xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))`
 
 func TestLex(t *testing.T) {
 	tokens := Lex(smallInput)
@@ -19,11 +21,27 @@ func TestLex(t *testing.T) {
 	fmt.Printf("tokens: %#v\n", tokens)
 }
 
+func TestLexConditional(t *testing.T) {
+	tokens := Lex(smallConditionalExampleInput)
+
+	if len(tokens) != 7 {
+		t.Fatalf("unexpected lex result expected 7, got = %d\ntokens = %#v\n", len(tokens), tokens)
+	}
+}
+
 func TestParse(t *testing.T) {
 	program := Parse(exampleInput)
 
 	if len(program) != 4 {
 		t.Fatalf("Incorrect parsing got %#v", program)
+	}
+}
+
+func TestParseConditional(t *testing.T) {
+	program := Parse(conditionalExampleInput)
+
+	if len(program) != 2 {
+		t.Fatalf("Incorrect Conditional parse. Expected = 2, got = %v\nprogram = %#v\n", len(program), program)
 	}
 }
 

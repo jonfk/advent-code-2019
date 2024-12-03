@@ -52,9 +52,16 @@ func ExecuteProgram(program []Mul) int {
 func Parse(input string) []Mul {
 	items := Lex(input)
 	var program []Mul
+	var isDontActive bool
 
 	for i := 0; i < len(items); {
-		if items[i].typ == itemMulStart && i+4 < len(items) && items[i+1].typ == itemNumber && items[i+2].typ == itemComma && items[i+3].typ == itemNumber && items[i+4].typ == itemMulEnd {
+		if items[i].typ == itemDoNot {
+			isDontActive = true
+			i += 1
+		} else if items[i].typ == itemDo {
+			isDontActive = false
+			i += 1
+		} else if !isDontActive && items[i].typ == itemMulStart && i+4 < len(items) && items[i+1].typ == itemNumber && items[i+2].typ == itemComma && items[i+3].typ == itemNumber && items[i+4].typ == itemMulEnd {
 			val1, _ := strconv.Atoi(items[i+1].val)
 			val2, _ := strconv.Atoi(items[i+3].val)
 			program = append(program, Mul{val1: val1, val2: val2})
@@ -83,6 +90,8 @@ func Lex(input string) []Item {
 func lexCorrupted(l *Lexer) stateFn {
 	if l.input[l.pos] == 'm' {
 		return lexMul
+	} else if l.input[l.pos] == 'd' {
+		return lexDoDont
 	} else {
 		l.pos += 1
 		l.start = l.pos
@@ -91,7 +100,7 @@ func lexCorrupted(l *Lexer) stateFn {
 }
 
 func lexMul(l *Lexer) stateFn {
-	if l.input[l.pos:l.pos+4] == "mul(" {
+	if l.pos+4 <= len(l.input) && l.input[l.pos:l.pos+4] == "mul(" {
 		l.items = append(l.items, Item{typ: itemMulStart, val: string(l.input[l.pos : l.pos+4])})
 		l.pos += 4
 		l.start = l.pos
@@ -130,6 +139,22 @@ func lexCommaOrEndMul(l *Lexer) stateFn {
 	} else {
 		return lexCorrupted
 	}
+}
+
+func lexDoDont(l *Lexer) stateFn {
+	if l.pos+7 <= len(l.input) && l.input[l.pos:l.pos+7] == "don't()" {
+		l.items = append(l.items, Item{typ: itemDoNot, val: string(l.input[l.pos : l.pos+7])})
+		l.pos += 7
+		l.start = l.pos
+	} else if l.pos+4 <= len(l.input) && l.input[l.pos:l.pos+4] == "do()" {
+		l.items = append(l.items, Item{typ: itemDo, val: string(l.input[l.pos : l.pos+4])})
+		l.pos += 4
+		l.start = l.pos
+	} else {
+		l.pos += 1
+		l.start = l.pos
+	}
+	return lexCorrupted
 }
 
 func IsNumber(x byte) bool {
