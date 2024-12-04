@@ -63,3 +63,61 @@ func TestRunPuzzleInput(t *testing.T) {
 
 	fmt.Printf("# puzzle\nsum = %d\n", sum)
 }
+
+func TestParseRegex(t *testing.T) {
+	program := ParseWithRegex(conditionalExampleInput)
+
+	if len(program) != 2 {
+		t.Fatalf("Incorrect Conditional Parse with Regex. Expected = 2, got = %d\nprogram = %#v\n", len(program), program)
+	}
+}
+
+func TestRunPuzzleInputWithRegex(t *testing.T) {
+	input, err := os.ReadFile("./input.txt")
+	if err != nil {
+		t.Fatalf("Could not read puzzle input: err = %s", err)
+	}
+
+	sum := Run(string(input))
+
+	fmt.Printf("# puzzle\nsum = %d\n", sum)
+}
+
+// NOTE: The benchmark showed that regex parsing was much slower than the custom lexer and parser
+// > go test -bench=. -benchtime=5s ./day3/...
+// goos: darwin
+// goarch: arm64
+// pkg: jonfk.ca/advent-of-code/2024/day3
+// cpu: Apple M4
+// BenchmarkParse-10                  88350             66842 ns/op
+// BenchmarkParseWithRegex-10         20001            302260 ns/op
+// PASS
+// ok      jonfk.ca/advent-of-code/2024/day3       15.824s
+
+var parseResult, parseWithRegexResult []Mul
+
+func BenchmarkParse(b *testing.B) {
+	var r []Mul
+	input, err := os.ReadFile("./input.txt")
+	if err != nil {
+		b.Fatalf("Could not read puzzle input: err = %s", err)
+	}
+
+	for n := 0; n < b.N; n++ {
+		r = Parse(string(input))
+	}
+	parseResult = r
+}
+
+func BenchmarkParseWithRegex(b *testing.B) {
+	var r []Mul
+	input, err := os.ReadFile("./input.txt")
+	if err != nil {
+		b.Fatalf("Could not read puzzle input: err = %s", err)
+	}
+
+	for n := 0; n < b.N; n++ {
+		r = ParseWithRegex(string(input))
+	}
+	parseWithRegexResult = r
+}
