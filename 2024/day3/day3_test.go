@@ -65,7 +65,7 @@ func TestRunPuzzleInput(t *testing.T) {
 }
 
 func TestParseRegex(t *testing.T) {
-	program := ParseWithRegex(conditionalExampleInput)
+	program := ParseWithNamedRegex(conditionalExampleInput)
 
 	if len(program) != 2 {
 		t.Fatalf("Incorrect Conditional Parse with Regex. Expected = 2, got = %d\nprogram = %#v\n", len(program), program)
@@ -89,10 +89,11 @@ func TestRunPuzzleInputWithRegex(t *testing.T) {
 // goarch: arm64
 // pkg: jonfk.ca/advent-of-code/2024/day3
 // cpu: Apple M4
-// BenchmarkParse-10                  88350             66842 ns/op
-// BenchmarkParseWithRegex-10         20001            302260 ns/op
+// BenchmarkParse-10                          89307             66544 ns/op
+// BenchmarkParseWithNamedRegex-10             6637            912917 ns/op
+// BenchmarkParseWithMultiRegex-10            19225            314754 ns/op
 // PASS
-// ok      jonfk.ca/advent-of-code/2024/day3       15.824s
+// ok      jonfk.ca/advent-of-code/2024/day3       22.133s
 
 var parseResult, parseWithRegexResult []Mul
 
@@ -109,7 +110,7 @@ func BenchmarkParse(b *testing.B) {
 	parseResult = r
 }
 
-func BenchmarkParseWithRegex(b *testing.B) {
+func BenchmarkParseWithNamedRegex(b *testing.B) {
 	var r []Mul
 	input, err := os.ReadFile("./input.txt")
 	if err != nil {
@@ -117,7 +118,20 @@ func BenchmarkParseWithRegex(b *testing.B) {
 	}
 
 	for n := 0; n < b.N; n++ {
-		r = ParseWithRegex(string(input))
+		r = ParseWithNamedRegex(string(input))
+	}
+	parseWithRegexResult = r
+}
+
+func BenchmarkParseWithMultiRegex(b *testing.B) {
+	var r []Mul
+	input, err := os.ReadFile("./input.txt")
+	if err != nil {
+		b.Fatalf("Could not read puzzle input: err = %s", err)
+	}
+
+	for n := 0; n < b.N; n++ {
+		r = ParseWithMultipleRegex(string(input))
 	}
 	parseWithRegexResult = r
 }

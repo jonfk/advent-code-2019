@@ -20,7 +20,40 @@ type match struct {
 	Index   int
 }
 
-func ParseWithRegex(input string) []Mul {
+// Uses a single regex using alternation (|) and named groups to extract the numbers from mul
+func ParseWithNamedRegex(input string) []Mul {
+	pattern := regexp.MustCompile(`(?P<mul>mul\((?P<num1>\d+),(?P<num2>\d+)\))|(?P<dont>don't\(\))|(?P<do>do\(\))`)
+
+	matches := pattern.FindAllStringSubmatch(input, -1)
+	names := pattern.SubexpNames()
+
+	var groupName2MatchIdx map[string]int = make(map[string]int)
+
+	for i, name := range names {
+		groupName2MatchIdx[name] = i
+	}
+
+	var program []Mul
+	var isDontActive bool
+
+	for _, match := range matches {
+
+		if !isDontActive && match[groupName2MatchIdx["mul"]] != "" {
+			num1, _ := strconv.Atoi(match[groupName2MatchIdx["num1"]])
+			num2, _ := strconv.Atoi(match[groupName2MatchIdx["num2"]])
+			program = append(program, Mul{val1: num1, val2: num2})
+		} else if match[groupName2MatchIdx["dont"]] != "" {
+			isDontActive = true
+		} else if match[groupName2MatchIdx["do"]] != "" {
+			isDontActive = false
+		}
+	}
+	return program
+}
+
+// Uses multiple regexes to match each type of expression (mul, don't, do) and extracts the numbers from mul with strings.
+// Also has to sort the matches because each regex is run on the input separately.
+func ParseWithMultipleRegex(input string) []Mul {
 	patterns := map[patternType]*regexp.Regexp{
 		mulPattern:  regexp.MustCompile(`mul\((\d+),(\d+)\)`),
 		dontPattern: regexp.MustCompile(`don't\(\)`),
