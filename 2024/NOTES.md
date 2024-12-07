@@ -186,3 +186,37 @@ the pivot and the rules actually included cycles which the problem input careful
 I ended up needing to check reddit, where I saw the meme about non-transitivity of the comparison and that put me on
 the right path. I think if I had used bubble sort like most people and simply swap the numbers that violate a rule, I 
 would not have encountered that problem. I am still unsure whether that was the most optimal solution.
+
+# Day 6
+
+The problem was a map that contains empty spots and spots with obstacles, a guard that has a direction and changes direction
+when it encounters an obstacle. I encoded the problem as a matrix and the cells and directions as enums. 
+
+The first part was to find all distinct positions the guard would be at given a starting direction and position. 
+
+The second part was to add an obstacle that would make the guard go in a loop. I initially tried to find a smart way
+to detect whether the guard would be in a loop without actually having to compute the whole path the guard would take,
+but that didn't seem to work.
+
+After spending a few hours on my broken solution, I cleaned up what I had and started part 2 frorm scratch.I ended up 
+implementing the simplest most bruteforce-ish solution I could think of. Part 1 already gave me a way to walk the guard
+around, I simply added a loop detection statement to it that would break out of the loop and return if there is a loop,
+then tried to add an obstacle to every position the guard had taken up on his original walk and try the run from it's 
+initial position using this new matrix. That ended up work. 
+
+I am still unsure why my optimal solution didn't work. But it speaks to implementing the simplest solution that could 
+give you an answer first before attempting to make it more efficient. Lesson learned.
+
+I probably should revisit this one and maybe try to make that more efficient solution work. Here is some pseudo code
+of how it would work.
+
+```
+var visitedCells [][]bool // a given coordinate is true if the guard has been there on his original walk
+var visitedDirections [][][]direction // The direction the guard has taken at this coordinate
+
+for each coordinate x,y in visitedCells:
+	simulate an obstacle at the next coordinate the guard would step using the direction he had taken in visitedDirections
+	simulate walk, if guard steps back on the x,y with the direction taken, loop has been detected
+	
+```
+
