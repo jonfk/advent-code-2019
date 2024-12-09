@@ -11,6 +11,7 @@ type operator int
 const (
 	ADD operator = iota
 	MUL
+	CONCAT
 )
 
 type equation struct {
@@ -71,6 +72,14 @@ func EvalEquation(ops []operator, nums []int) int {
 			res = res + nums[i+1]
 		case MUL:
 			res = res * nums[i+1]
+		case CONCAT:
+			// TODO: implement concat mathematically and through string manipulation. Benchmark to see difference
+			resStr := strconv.Itoa(res) + strconv.Itoa(nums[i+1])
+			newRes, err := strconv.Atoi(resStr)
+			if err != nil {
+				log.Fatalf("Not possible Parse error Atoi. resStr = %v\n", resStr)
+			}
+			res = newRes
 		}
 	}
 	return res
@@ -83,14 +92,10 @@ func GenPermutationOps(n int) [][]operator {
 	var ops [][]operator
 	for i := 0; i < n; i++ {
 		if i == 0 {
-			ops = [][]operator{{ADD}, {MUL}}
+			ops = [][]operator{{ADD}, {MUL}, {CONCAT}}
 		} else {
-			clonedOps := make([][]operator, len(ops))
-			copy(clonedOps, ops)
-			for i := range clonedOps {
-				clonedOps[i] = make([]operator, len(ops[i]))
-				copy(clonedOps[i], ops[i])
-			}
+			clonedOps := CloneOps(ops)
+			clonedOps2 := CloneOps(ops)
 
 			for i := range ops {
 				ops[i] = append(ops[i], ADD)
@@ -98,8 +103,22 @@ func GenPermutationOps(n int) [][]operator {
 			for i := range clonedOps {
 				clonedOps[i] = append(clonedOps[i], MUL)
 			}
+			for i := range clonedOps2 {
+				clonedOps2[i] = append(clonedOps2[i], CONCAT)
+			}
 			ops = append(ops, clonedOps...)
+			ops = append(ops, clonedOps2...)
 		}
 	}
 	return ops
+}
+
+func CloneOps(ops [][]operator) [][]operator {
+	clonedOps := make([][]operator, len(ops))
+	copy(clonedOps, ops)
+	for i := range clonedOps {
+		clonedOps[i] = make([]operator, len(ops[i]))
+		copy(clonedOps[i], ops[i])
+	}
+	return clonedOps
 }
