@@ -86,28 +86,121 @@ func CountAntiNodes(input Input) int {
 
 func GenAntiNodes(a, b Coord, xLen, yLen int) []Coord {
 	var res []Coord
+	var an1, an2 Coord
 
-	var an1 Coord
-	an1XDiff := a.x - b.x
-	an1.x = a.x + an1XDiff
-	an1YDiff := a.y - b.y
-	an1.y = a.y + an1YDiff
+	xDiff := a.x - b.x
+	yDiff := a.y - b.y
+
+	an1.x = a.x + xDiff
+	an1.y = a.y + yDiff
 
 	if IsValid(an1, xLen, yLen) {
 		res = append(res, an1)
 	}
 
-	var an2 Coord
-	an2XDiff := b.x - a.x
-	an2.x = b.x + an2XDiff
-	an2YDiff := b.y - a.y
-	an2.y = b.y + an2YDiff
+	an2.x = b.x - xDiff
+	an2.y = b.y - yDiff
 
 	if IsValid(an2, xLen, yLen) {
 		res = append(res, an2)
 	}
 
 	return res
+}
+
+func CountAntiNodesWithResonance(input Input) int {
+	var antiNodes map[Coord]bool = make(map[Coord]bool)
+
+	for _, coords := range input.antennas {
+		combinations := GenCombinations(coords)
+
+		for _, combo := range combinations {
+			if len(combo) != 2 {
+				log.Fatalf("Incorrect combo generated")
+			}
+			for _, c := range GenAntiNodesWithResonance(combo[0], combo[1], input.xLen, input.yLen) {
+				antiNodes[c] = true
+			}
+		}
+	}
+
+	return len(antiNodes)
+}
+
+func GenAntiNodesWithResonance(a, b Coord, xLen, yLen int) []Coord {
+	var res []Coord
+
+	xDiff := a.x - b.x
+	yDiff := a.y - b.y
+
+	res = append(res, a)
+
+	i := 1
+	for {
+		var an Coord
+		an.x = a.x + (xDiff * i)
+		an.y = a.y + (yDiff * i)
+
+		if IsValid(an, xLen, yLen) {
+			res = append(res, an)
+		} else {
+			break
+		}
+		i++
+	}
+
+	i = 1
+	for {
+		var an Coord
+		an.x = a.x - (xDiff * i)
+		an.y = a.y - (yDiff * i)
+		if IsValid(an, xLen, yLen) {
+			res = append(res, an)
+		} else {
+			break
+		}
+		i++
+	}
+
+	return res
+}
+
+func getLinePoints(point1, point2 Coord, xLen, yLen int) []Coord {
+	points := make([]Coord, 0)
+
+	// Handle vertical line
+	if point1.x == point2.x {
+		for y := 0; y <= yLen; y++ {
+			points = append(points, Coord{point1.x, y})
+		}
+		return points
+	}
+
+	// Calculate slope and y-intercept
+	slope := float64(point2.y-point1.y) / float64(point2.x-point1.x)
+	b := float64(point1.y) - slope*float64(point1.x)
+
+	// Calculate points for the entire width of the space
+	for x := 0; x <= xLen; x++ {
+		y := slope*float64(x) + b
+		roundedY := round(y)
+
+		// Only add points that are within the vertical bounds
+		if roundedY >= 0 && roundedY < yLen {
+			points = append(points, Coord{x, roundedY})
+		}
+	}
+
+	return points
+}
+
+// round implements math.Round functionality manually
+// Adds 0.5 and truncates to achieve rounding to nearest integer
+func round(x float64) int {
+	if x < 0 {
+		return int(x - 0.5)
+	}
+	return int(x + 0.5)
 }
 
 func IsValid(c Coord, xLen, yLen int) bool {

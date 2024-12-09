@@ -19,6 +19,17 @@ const example = `............
 ............
 ............`
 
+const example2 = `T.........
+...T......
+.T........
+..........
+..........
+..........
+..........
+..........
+..........
+..........`
+
 func TestCountAntiNodesExample(t *testing.T) {
 	input := Parse(example)
 
@@ -26,6 +37,12 @@ func TestCountAntiNodesExample(t *testing.T) {
 
 	if count != 14 {
 		t.Fatalf("expected = 14, got = %v\n", count)
+	}
+
+	count2 := CountAntiNodesWithResonance(input)
+
+	if count2 != 34 {
+		t.Fatalf("expected = 34, got = %v\n", count2)
 	}
 }
 
@@ -37,6 +54,7 @@ func TestCountAntiNodes(t *testing.T) {
 
 	input := Parse(string(inputTxt))
 	count := CountAntiNodes(input)
+	count2 := CountAntiNodesWithResonance(input)
 
-	fmt.Printf("# Puzzle\nCount = %v\n", count)
+	fmt.Printf("# Puzzle\nCount = %v\n\n#Puzzle Part 2\nCount = %v\n", count, count2)
 }
