@@ -220,3 +220,24 @@ for each coordinate x,y in visitedCells:
 	
 ```
 
+# Day 7
+
+Day 7 was another parsing and calculator problem. The solution to part 1 was fairly straight forward of parsing some 
+numbers and a target number to get to with some operators. I used an enum to model the operators (+ and *) and use 
+a permutation generation algorithm that I have down pretty well by now. To do the evaluation itself, I used a stack 
+as I would to create an RPN (reverse polish notation) calculator.
+
+The second part was simply adding a concat operator which I was lazy and implemented using string concatenation instead
+of mathematically. I should think about how to do it mathematically and benchmark if there is any difference in performance.
+
+Leaving a TODO here for that. I am really curious since I think the string concatenation version is actually pretty
+decently efficient?
+
+# Day 8
+
+Day 8 was essentially a sort of graphing problem where you have points of different types, each pair of point of a 
+particular type generate points. The first part the points generated from each pair must be distance equal to the 
+distance between the points from the points. The second part, the points were on every point on the invisible line 
+between the points. In truth, it was not the most difficult, but I took the longest here because it took me forever to
+actually understand what the problem actually was and what to implement. 
+
