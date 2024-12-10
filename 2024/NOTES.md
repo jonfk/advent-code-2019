@@ -241,3 +241,14 @@ distance between the points from the points. The second part, the points were on
 between the points. In truth, it was not the most difficult, but I took the longest here because it took me forever to
 actually understand what the problem actually was and what to implement. 
 
+# Day 9
+
+The problem today was a representation of blocks in a file system which can be empty or contain blocks from a file. The
+problem was to compact the blocks and calculate a checksum on the resulting blocks. Part 1 was fairly straight forward
+as usual. 
+
+But part 2 strained my reading comprehension. I misunderstood the order of the algorithm and ended up implementing 
+a wrong algorithm on first try. On second try, I did end up with much nicer code. I ended up implementing some unnecessary
+work because of my wrong first pass. I ended up debugging for a while not getting the solution but found out in the end
+that my checksumming function had an assumption from part 1 that I didn't revisit which was causing the bug.
+
