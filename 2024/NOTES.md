@@ -252,3 +252,23 @@ a wrong algorithm on first try. On second try, I did end up with much nicer code
 work because of my wrong first pass. I ended up debugging for a while not getting the solution but found out in the end
 that my checksumming function had an assumption from part 1 that I didn't revisit which was causing the bug.
 
+# Day 10
+
+The problem for day 10 was a 2d map encoded as numbers that allows traversal from 0 to 9 in increments of 1. Part 1 
+was actually simple enough to solve with a recursive solution directly with the input. Part 2 was similar but instead
+of simply finding out how many ends I can find per start, I needed to find how many distinct paths. So I had to implement
+the recursive solution in the iterative version. It was pretty fun actually because my first version for part 1 and 3rd 
+version for part 2 worked. I had very little debugging to do. 
+
+I also decided to write in Java for this one since I am interviewing recently and would like the practice in case some
+companies are really strict about the programming language they want to use in the interview. This turned out to be 
+the perfect problem to do that with since I wasted a lot of time on the tooling and setup. I decided to go with Jbang 
+to run the Java solution because of it's simplicity. I just really did not want to debug a gradle build or even a maven
+xml soup. I would have to admit that the build tooling is probably 40% of the reason why I don't do Java side projects
+most of the time. The other is how verbose everything is. But I got to say that since Java 9, which was what I was using 
+the last company I used Java on the job, Java has improved a lot. A few features I like a lot:
+
+- record classes
+- var for local variable type inference
+- switch expressions
+- pattern matching
