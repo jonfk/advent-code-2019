@@ -272,3 +272,13 @@ the last company I used Java on the job, Java has improved a lot. A few features
 - var for local variable type inference
 - switch expressions
 - pattern matching
+
+# Day 11
+
+The problem was deceptively simple. Part 1 was easy to do with a bruteforce solution. Part 2 was just part 1 with a 
+much higher iteration number which wouldn't work with the brute force solution. I didn't get much time to think about 
+the problem since I have been taking care of Alexander these days, So I checked out the subreddit where I saw the 
+suggestion of using a recursive solution with memoization. Took me a bit of time to think about it but the solution 
+ended up pretty simple too. I still had issues with number overflowing which required me to use long instead of int 
+for the result.
+
