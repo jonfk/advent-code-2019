@@ -282,3 +282,21 @@ suggestion of using a recursive solution with memoization. Took me a bit of time
 ended up pretty simple too. I still had issues with number overflowing which required me to use long instead of int 
 for the result.
 
+# Day 12
+
+Day 12 was another grid based problem where each cell represented a plot with a plant that can be aggregated to a region
+if they touch similar plots. Part was was simply counting the area and perimeter which was fairly straight forward.
+
+Part 2 was somewhat frustrating because instead of the perimeter it was the sides of each region that needed to be 
+counted. I did figure out that it was a corner counting thing but my mind simply glazed over thinking about each 
+case, I ended up trying out claude to get the solution but I don't know if it was because of my code or my explanation
+that were wrong but I could simply not prompt it to get the right solution. I ended up having to implement the corner
+cases myself, it was only 8 conditions but I hate these kind of problems. I guess I should try better and think them
+through. I wasted a bunch of time in the end on this because I kept prompting instead of stopping and thinking about
+it myself. Once I did that, the solution was actually pretty straight forward.
+
+I also learned that I had been abusing record classes for mutable data. The are primarily meant for immutable data
+which is why the fields are final. Shows an area where Java is lacking where it can't make things fully immutable
+when needed. Such as when I used a Map<> in a record, I could update it but not an int. It is definitely user error here,
+I could also have read the docs more closely, but the language should be able to indicate that to me better too.
+I ended up using plain classes instead but that showed me again how verbose Java is again.
