@@ -318,3 +318,5 @@ understand what exactly I was supposed to expect as the output.
 
 Today was another 2d grid simulation problem. I still had a few problems with my initial solution. I should really
 be getting better at those now. 
+
+
