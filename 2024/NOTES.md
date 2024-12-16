@@ -300,3 +300,21 @@ which is why the fields are final. Shows an area where Java is lacking where it 
 when needed. Such as when I used a Map<> in a record, I could update it but not an int. It is definitely user error here,
 I could also have read the docs more closely, but the language should be able to indicate that to me better too.
 I ended up using plain classes instead but that showed me again how verbose Java is again.
+
+# Day 13
+
+The problem of today was essentially to figure out how many times mA + nB = X where A, B and X are given and we need
+to find m and n. Part 1 was pretty easy to solve iteratively. Part 2 ended up needing a different solution since it was
+essentially the same problem but with much larger numbers. Took me a while and I honestly didn't come up with the solution
+myself. I did know that there must be a way to solve it mathematically, but I just don't remember how. I used Claude to 
+get the formulas for how to do it. It was a bit of linear algebra.
+
+# Day 14
+
+Another grid and moving coordinates problem. Pretty simple. Part 2 was a bit vague, so I consulted the subreddit to 
+understand what exactly I was supposed to expect as the output. 
+
+# Day 15
+
+Today was another 2d grid simulation problem. I still had a few problems with my initial solution. I should really
+be getting better at those now. 
