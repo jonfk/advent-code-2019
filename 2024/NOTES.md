@@ -319,4 +319,10 @@ understand what exactly I was supposed to expect as the output.
 Today was another 2d grid simulation problem. I still had a few problems with my initial solution. I should really
 be getting better at those now. 
 
+# Day 16
 
+Day 16's problem was a path finding problem on a 2d grid. For part 1 I initially implemented BFS to find the min cost 
+path to the end. But my initial implementation wasn't efficient. I ended up using Claude to get an A* implementation 
+that worked well. 
+
+Part 2 needed the insight of ditching A* in favor of Dijkstra's algorithm to find all paths that had min cost.
